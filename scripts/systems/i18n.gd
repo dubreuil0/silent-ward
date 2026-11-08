@@ -143,8 +143,14 @@ static func setup() -> void:
 	if _done:
 		return
 	_done = true
+	# Türkçe tabloda, İngilizce tablodaki her kısa anahtarın kendisini döndüren bir kayıt olmalı.
+	# Aksi halde Godot eksik anahtarı yedek dil olan İngilizceye çevirir.
+	var tr_full := TR.duplicate()
+	for k in EN:
+		if not tr_full.has(k):
+			tr_full[k] = k
 	TranslationServer.add_translation(_make("en", EN))
-	TranslationServer.add_translation(_make("tr", TR))
+	TranslationServer.add_translation(_make("tr", tr_full))
 
 
 static func _make(locale: String, messages: Dictionary) -> Translation:
