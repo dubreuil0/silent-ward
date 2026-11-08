@@ -43,7 +43,8 @@ func _ready() -> void:
 	p.global_position = LevelBuilder.cell_center(18, 24)
 	p.rotation.y = 0.0
 	p.head.rotation.x = 0.0
-	Game.hud.show_note(tr("note.n2.title"), tr("note.n2.body"))
+	# en uzun not: küçük ekranda sığıyor mu
+	Game.hud.show_note(tr("note.n5.title"), tr("note.n5.body"))
 	await get_tree().create_timer(0.6).timeout
 	_save("11_note")
 	Game.hud.close_note()

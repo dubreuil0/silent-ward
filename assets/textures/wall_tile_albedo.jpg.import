@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://csjsaaahjwy16"
 path.s3tc="res://.godot/imported/wall_tile_albedo.jpg-b253231c020e7e75514c5dfc5233222f.s3tc.ctex"
+path.etc2="res://.godot/imported/wall_tile_albedo.jpg-b253231c020e7e75514c5dfc5233222f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/wall_tile_albedo.jpg"
-dest_files=["res://.godot/imported/wall_tile_albedo.jpg-b253231c020e7e75514c5dfc5233222f.s3tc.ctex"]
+dest_files=["res://.godot/imported/wall_tile_albedo.jpg-b253231c020e7e75514c5dfc5233222f.s3tc.ctex", "res://.godot/imported/wall_tile_albedo.jpg-b253231c020e7e75514c5dfc5233222f.etc2.ctex"]
 
 [params]
 

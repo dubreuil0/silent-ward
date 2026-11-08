@@ -151,14 +151,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if dead or frozen:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not reading:
-		var s := Game.sensitivity * 0.006
-		var rel: Vector2 = event.relative
-		if hidden_in:
-			_locker_yaw = clampf(_locker_yaw - rel.x * s, -0.7, 0.7)
-			head.rotation.y = _locker_yaw
-		else:
-			rotate_y(-rel.x * s)
-		head.rotation.x = clampf(head.rotation.x - rel.y * s, -1.45, 1.45)
+		look(event.relative, Game.sensitivity * 0.006)
 	elif event.is_action_pressed("flashlight") and not reading:
 		set_flashlight(not flashlight_on)
 	elif event.is_action_pressed("interact"):
@@ -167,6 +160,18 @@ func _unhandled_input(event: InputEvent) -> void:
 				Game.hud.close_note()
 		else:
 			_interact()
+
+
+## Fare ya da dokunmatik bakış: rel piksel cinsinden, s piksel başına radyan.
+func look(rel: Vector2, s: float) -> void:
+	if dead or frozen:
+		return
+	if hidden_in:
+		_locker_yaw = clampf(_locker_yaw - rel.x * s, -0.7, 0.7)
+		head.rotation.y = _locker_yaw
+	else:
+		rotate_y(-rel.x * s)
+	head.rotation.x = clampf(head.rotation.x - rel.y * s, -1.45, 1.45)
 
 
 func set_flashlight(on: bool) -> void:

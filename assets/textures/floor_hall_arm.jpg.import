@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://vw4w0hb3kp34"
 path.s3tc="res://.godot/imported/floor_hall_arm.jpg-f5e9656639a0cdcec9f8f07f25b300c4.s3tc.ctex"
+path.etc2="res://.godot/imported/floor_hall_arm.jpg-f5e9656639a0cdcec9f8f07f25b300c4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/floor_hall_arm.jpg"
-dest_files=["res://.godot/imported/floor_hall_arm.jpg-f5e9656639a0cdcec9f8f07f25b300c4.s3tc.ctex"]
+dest_files=["res://.godot/imported/floor_hall_arm.jpg-f5e9656639a0cdcec9f8f07f25b300c4.s3tc.ctex", "res://.godot/imported/floor_hall_arm.jpg-f5e9656639a0cdcec9f8f07f25b300c4.etc2.ctex"]
 
 [params]
 

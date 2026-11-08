@@ -106,7 +106,8 @@ func _ready() -> void:
 	amb.play()
 
 	Game.settings_changed.connect(_apply_brightness)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if not Game.touch:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Game.set_objective(tr("Saint Halvard'dan çıkmanın bir yolunu bul."))
 	_intro_messages()
 	for a in OS.get_cmdline_user_args():
@@ -119,7 +120,7 @@ func _ready() -> void:
 func _intro_messages() -> void:
 	var lines := [
 		[2.5, "Kardeşin bu hastanede kayboldu. Kapı arkandan kilitlendi.", 4.0],
-		[7.5, "[F] Fener   ·   [Shift] Koş   ·   [Ctrl] Eğil   ·   [E] Etkileşim", 5.0],
+		[7.5, "intro.touch" if Game.touch else "[F] Fener   ·   [Shift] Koş   ·   [Ctrl] Eğil   ·   [E] Etkileşim", 6.0],
 	]
 	for l in lines:
 		get_tree().create_timer(l[0]).timeout.connect(func() -> void: Game.show_message(tr(l[1]), l[2]))
@@ -379,7 +380,7 @@ func lamp(pos: Vector3, kind: String, mode: FlickerLight.Mode, energy := 1.0, ro
 	l.base_energy = energy * 1.8
 	l.omni_range = 5.0 if kind == "desk" else 8.5
 	l.omni_attenuation = 1.4
-	l.shadow_enabled = true
+	l.shadow_enabled = not Game.mobile
 	l.shadow_bias = 0.05
 	l.light_volumetric_fog_energy = 1.4
 	l.mode = mode
@@ -448,6 +449,7 @@ func _setup_environment() -> void:
 	_env.adjustment_enabled = true
 	_env.adjustment_contrast = 1.1
 	_env.adjustment_saturation = 0.8
+	Game.adapt_environment(_env, 0.035)
 	var we := WorldEnvironment.new()
 	we.environment = _env
 	add_child(we)

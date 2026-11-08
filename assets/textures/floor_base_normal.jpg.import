@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cchfgacvu1vtc"
 path.s3tc="res://.godot/imported/floor_base_normal.jpg-eb7752fe04da5c6c2af64c2bd52c083f.s3tc.ctex"
+path.etc2="res://.godot/imported/floor_base_normal.jpg-eb7752fe04da5c6c2af64c2bd52c083f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/floor_base_normal.jpg"
-dest_files=["res://.godot/imported/floor_base_normal.jpg-eb7752fe04da5c6c2af64c2bd52c083f.s3tc.ctex"]
+dest_files=["res://.godot/imported/floor_base_normal.jpg-eb7752fe04da5c6c2af64c2bd52c083f.s3tc.ctex", "res://.godot/imported/floor_base_normal.jpg-eb7752fe04da5c6c2af64c2bd52c083f.etc2.ctex"]
 
 [params]
 

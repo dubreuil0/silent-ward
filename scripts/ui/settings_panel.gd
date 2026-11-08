@@ -27,9 +27,23 @@ func _ready() -> void:
 		Game.apply_settings())
 	lang_row.add_child(lang)
 	v.add_child(lang_row)
-	_slider(v, "Fare hassasiyeti", 0.05, 1.0, Game.sensitivity, func(x: float) -> void: Game.sensitivity = x)
+	_slider(v, "Bakış hassasiyeti" if Game.touch else "Fare hassasiyeti", 0.05, 1.0, Game.sensitivity, func(x: float) -> void: Game.sensitivity = x)
 	_slider(v, "Ana ses", 0.0, 1.0, Game.master_volume, func(x: float) -> void: Game.master_volume = x)
 	_slider(v, "Parlaklık", 0.6, 1.8, Game.brightness, func(x: float) -> void: Game.brightness = x)
+	if Game.touch:
+		_slider(v, "Buton görünürlüğü", 0.15, 1.0, Game.touch_opacity, func(x: float) -> void: Game.touch_opacity = x)
+	if Game.mobile:
+		v.add_theme_constant_override("separation", 10)
+	else:
+		_add_fullscreen(v)
+	v.add_child(UiKit.label("İpucu: Oyun karanlık olmak üzere tasarlandı. Parlaklığı,\nekranın en karanlık köşesi zar zor seçilene kadar ayarla.", 14, "ui", Color(0.55, 0.53, 0.5)))
+	v.add_child(UiKit.button("Geri", func() -> void:
+		Game.save_settings()
+		hide()
+		closed.emit()))
+
+
+func _add_fullscreen(v: VBoxContainer) -> void:
 	var fs := CheckBox.new()
 	fs.text = "Tam ekran (F11)"
 	fs.button_pressed = Game.fullscreen
@@ -38,11 +52,6 @@ func _ready() -> void:
 		Game.fullscreen = on
 		Game.apply_settings())
 	v.add_child(fs)
-	v.add_child(UiKit.label("İpucu: Oyun karanlık olmak üzere tasarlandı. Parlaklığı,\nekranın en karanlık köşesi zar zor seçilene kadar ayarla.", 14, "ui", Color(0.55, 0.53, 0.5)))
-	v.add_child(UiKit.button("Geri", func() -> void:
-		Game.save_settings()
-		hide()
-		closed.emit()))
 
 
 func _slider(parent: Control, text: String, lo: float, hi: float, value: float, setter: Callable) -> void:

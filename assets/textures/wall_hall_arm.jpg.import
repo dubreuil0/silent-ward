@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://brt2pq4w4pw2m"
 path.s3tc="res://.godot/imported/wall_hall_arm.jpg-15635b007ce380f904f8465d6656b674.s3tc.ctex"
+path.etc2="res://.godot/imported/wall_hall_arm.jpg-15635b007ce380f904f8465d6656b674.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/wall_hall_arm.jpg"
-dest_files=["res://.godot/imported/wall_hall_arm.jpg-15635b007ce380f904f8465d6656b674.s3tc.ctex"]
+dest_files=["res://.godot/imported/wall_hall_arm.jpg-15635b007ce380f904f8465d6656b674.s3tc.ctex", "res://.godot/imported/wall_hall_arm.jpg-15635b007ce380f904f8465d6656b674.etc2.ctex"]
 
 [params]
 

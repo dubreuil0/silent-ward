@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bk3s6s1p2nsrn"
 path.s3tc="res://.godot/imported/metal_green_arm.jpg-7b9ca7cffb941d4d719656e8883649e5.s3tc.ctex"
+path.etc2="res://.godot/imported/metal_green_arm.jpg-7b9ca7cffb941d4d719656e8883649e5.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/metal_green_arm.jpg"
-dest_files=["res://.godot/imported/metal_green_arm.jpg-7b9ca7cffb941d4d719656e8883649e5.s3tc.ctex"]
+dest_files=["res://.godot/imported/metal_green_arm.jpg-7b9ca7cffb941d4d719656e8883649e5.s3tc.ctex", "res://.godot/imported/metal_green_arm.jpg-7b9ca7cffb941d4d719656e8883649e5.etc2.ctex"]
 
 [params]
 

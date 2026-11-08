@@ -90,6 +90,20 @@ const EN := {
 	"IŞIĞI KAPAT": "TURN OFF THE LIGHT",
 	"ÇIKIŞ": "EXIT",
 
+	# --- dokunmatik
+	"ETKİLEŞ": "USE",
+	"FENER": "LIGHT",
+	"EĞİL": "CROUCH",
+	"NEFES": "BREATH",
+	"Kapatmak için dokun": "Tap to close",
+	"Yakında! NEFESİNİ TUT  [NEFES]": "She's close! HOLD YOUR BREATH  [BREATH]",
+	"Saklanıyorsun   [ETKİLEŞ] Çık   [NEFES] Nefesini tut": "Hiding   [USE] Leave   [BREATH] Hold breath",
+	"Bakış hassasiyeti": "Look sensitivity",
+	"Buton görünürlüğü": "Button visibility",
+	"intro.touch": "Left side: walk (push all the way to run)   ·   Right side: look around",
+	"hud.controls.touch": "\nLeft: walk / run  ·  Right: look  ·  LIGHT, CROUCH, USE buttons\nIn a locker: hold the BREATH button",
+	"menu.help.touch": "You entered the abandoned Saint Halvard looking for your sibling, and the door locked behind you.\nFind five fuses, start the basement generator and escape through the main door.\n\nLeft side  Joystick: walk, push all the way to run\nRight side  Swipe to look around\nUSE  Doors, items, notes, lockers          LIGHT  Flashlight\nCROUCH  Walk silently          BREATH  Hold it in a locker          II  Pause\n\nThe Nurse cannot see, but she hears everything and is drawn to light.\nRunning and opening doors make noise. Crouch-walking is silent.",
+
 	# --- uzun metinler
 	"hud.controls": "\nWASD Move  ·  Shift Run  ·  Ctrl Crouch  ·  F Flashlight  ·  F11 Fullscreen\nE / Left Click Interact  ·  Right Click / Space Hold breath (in a locker)",
 	"end.win.sub": "The doors of Saint Halvard closed behind you.\nBut your sibling is still in there somewhere...",
@@ -114,6 +128,9 @@ const EN := {
 }
 
 const TR := {
+	"intro.touch": "Sol taraf: yürü (sonuna kadar it: koş)   ·   Sağ taraf: etrafa bak",
+	"hud.controls.touch": "\nSol: yürü / koş  ·  Sağ: bak  ·  FENER, EĞİL, ETKİLEŞ butonları\nDolapta: NEFES butonunu basılı tut",
+	"menu.help.touch": "Kardeşini aramak için kapanmış Saint Halvard'a girdin; kapı arkandan kilitlendi.\nBeş sigortayı bul, bodrumdaki jeneratörü çalıştır ve ana kapıdan kaç.\n\nSol taraf  Joystick: yürü, sonuna kadar it: koş\nSağ taraf  Parmağını kaydırarak etrafa bak\nETKİLEŞ  Kapı, eşya, not, dolap          FENER  Fener\nEĞİL  Sessiz yürü          NEFES  Dolapta basılı tut          II  Duraklat\n\nHemşire göremez ama çok iyi duyar ve ışığa yönelir.\nKoşmak ve kapı açmak ses çıkarır. Eğilerek yürümek sessizdir.",
 	"hud.controls": "\nWASD Hareket  ·  Shift Koş  ·  Ctrl Eğil  ·  F Fener  ·  F11 Tam ekran\nE / Sol Tık Etkileşim  ·  Sağ Tık / Boşluk Nefesini tut (dolapta)",
 	"end.win.sub": "Saint Halvard'ın kapıları arkandan kapandı.\nAma kardeşin hâlâ orada bir yerde...",
 	"end.lose.sub": "Hemşire hiçbir hastasını kaçırmaz.",

@@ -28,6 +28,7 @@ var _fade: ColorRect
 
 func _ready() -> void:
 	get_tree().paused = false
+	get_tree().quit_on_go_back = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var b := LevelBuilder.new(PackedStringArray(MAP))
 	b.build(self)
@@ -56,6 +57,7 @@ func _ready() -> void:
 	env.volumetric_fog_anisotropy = 0.6
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 0.75
+	Game.adapt_environment(env, 0.025)
 	var we := WorldEnvironment.new()
 	we.environment = env
 	add_child(we)
@@ -109,8 +111,18 @@ func _ready() -> void:
 			Game.start_game.call_deferred()
 			return
 		if a.begins_with("--shots="):
+			var dir := a.substr(8)
 			await get_tree().create_timer(4.0).timeout
-			get_viewport().get_texture().get_image().save_png(a.substr(8).path_join("00_menu.png"))
+			get_viewport().get_texture().get_image().save_png(dir.path_join("00_menu.png"))
+			_menu.hide()
+			_settings.show()
+			await get_tree().create_timer(0.5).timeout
+			get_viewport().get_texture().get_image().save_png(dir.path_join("00_settings.png"))
+			_settings.hide()
+			_menu.show()
+			_controls.show()
+			await get_tree().create_timer(0.5).timeout
+			get_viewport().get_texture().get_image().save_png(dir.path_join("00_help.png"))
 			get_tree().quit()
 
 
@@ -184,9 +196,9 @@ func _build_ui() -> void:
 
 	var margin := MarginContainer.new()
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 90)
-	margin.add_theme_constant_override("margin_top", 120)
-	margin.add_theme_constant_override("margin_bottom", 60)
+	margin.add_theme_constant_override("margin_left", 70 if Game.mobile else 90)
+	margin.add_theme_constant_override("margin_top", 36 if Game.mobile else 120)
+	margin.add_theme_constant_override("margin_bottom", 20 if Game.mobile else 60)
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(margin)
 	var col := VBoxContainer.new()
@@ -202,10 +214,17 @@ func _build_ui() -> void:
 	tw.tween_property(title, "modulate:a", 1.0, 0.05)
 	tw.tween_property(title, "modulate:a", 0.7, 0.04).set_delay(0.1)
 	tw.tween_property(title, "modulate:a", 1.0, 0.08)
-	col.add_child(UiKit.label("Saint Halvard Akıl Hastanesi  ·  1987", 22, "title", Color(0.6, 0.58, 0.54)))
+	var subtitle := UiKit.label("Saint Halvard Akıl Hastanesi  ·  1987", 22, "title", Color(0.6, 0.58, 0.54))
+	col.add_child(subtitle)
 	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(0, 50)
+	spacer.custom_minimum_size = Vector2(0, 20 if Game.mobile else 50)
 	col.add_child(spacer)
+	# küçük ekranda ayarlar / yardım açıkken başlık yer kaplamasın
+	var header: Array[Control] = [title, subtitle, spacer]
+	var fit := func() -> void:
+		if Game.mobile:
+			for c in header:
+				c.visible = not (_settings.visible or _controls.visible)
 
 	_menu = VBoxContainer.new()
 	_menu.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
@@ -231,10 +250,12 @@ func _build_ui() -> void:
 	cv.add_theme_constant_override("separation", 6)
 	_controls.add_child(cv)
 	cv.add_child(UiKit.label("NASIL OYNANIR", 24, "title", Color(0.85, 0.15, 0.1)))
-	var help := UiKit.label("menu.help", 16)
+	var help := UiKit.label("menu.help.touch" if Game.touch else "menu.help", 16)
 	help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	cv.add_child(help)
 	col.add_child(_controls)
+	_settings.visibility_changed.connect(fit)
+	_controls.visibility_changed.connect(fit)
 
 	var credit := UiKit.label("Texture ve modeller: Poly Haven (CC0)  ·  Sesler prosedürel üretildi", 13, "ui", Color(0.4, 0.4, 0.4))
 	credit.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)

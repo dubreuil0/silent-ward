@@ -74,6 +74,10 @@ func _ready() -> void:
 
 	_build_locker_view()
 	_build_gameplay()
+	if Game.touch:
+		_root.add_child(TouchControls.new())
+	# Android geri tuşu oyundan çıkmasın, duraklatsın
+	get_tree().quit_on_go_back = false
 	_build_note()
 	_build_pause()
 	_build_end()
@@ -111,7 +115,7 @@ func _build_gameplay() -> void:
 	_message = UiKit.label("", 22, "title", Color(0.9, 0.86, 0.8))
 	_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_message.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	_message.position = Vector2(-450, -170)
+	_message.position = Vector2(-450, -330 if Game.touch else -170)
 	_message.size = Vector2(900, 40)
 	_message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_message.modulate.a = 0.0
@@ -224,7 +228,7 @@ func _build_note() -> void:
 	sb.bg_color = Color(0.78, 0.74, 0.62)
 	sb.border_color = Color(0.45, 0.38, 0.28)
 	sb.set_border_width_all(2)
-	sb.set_content_margin_all(42)
+	sb.set_content_margin_all(26 if Game.mobile else 42)
 	sb.shadow_color = Color(0, 0, 0, 0.6)
 	sb.shadow_size = 18
 	paper.add_theme_stylebox_override("panel", sb)
@@ -232,7 +236,7 @@ func _build_note() -> void:
 	paper.rotation_degrees = -0.8
 	center.add_child(paper)
 	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 18)
+	v.add_theme_constant_override("separation", 10 if Game.mobile else 18)
 	paper.add_child(v)
 	_note_title = Label.new()
 	_note_title.add_theme_font_override("font", UiKit.font("title"))
@@ -241,13 +245,13 @@ func _build_note() -> void:
 	v.add_child(_note_title)
 	_note_body = Label.new()
 	_note_body.add_theme_font_override("font", UiKit.font("type"))
-	_note_body.add_theme_font_size_override("font_size", 18)
+	_note_body.add_theme_font_size_override("font_size", 16 if Game.mobile else 18)
 	_note_body.add_theme_color_override("font_color", Color(0.12, 0.1, 0.1))
 	_note_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_note_body.custom_minimum_size = Vector2(556, 0)
 	v.add_child(_note_body)
 	var foot := Label.new()
-	foot.text = "[E] / [ESC]  Kapat"
+	foot.text = "Kapatmak için dokun" if Game.touch else "[E] / [ESC]  Kapat"
 	foot.add_theme_font_size_override("font_size", 14)
 	foot.add_theme_color_override("font_color", Color(0.35, 0.3, 0.25))
 	foot.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -279,8 +283,9 @@ func _build_pause() -> void:
 		_settings.show()))
 	v.add_child(UiKit.button("Yeniden başla", func() -> void: Game.start_game()))
 	v.add_child(UiKit.button("Ana menü", func() -> void: Game.go_menu()))
-	v.add_child(UiKit.button("Masaüstüne çık", func() -> void: get_tree().quit()))
-	v.add_child(UiKit.label("hud.controls", 14, "ui", Color(0.5, 0.5, 0.5)))
+	if not Game.mobile:
+		v.add_child(UiKit.button("Masaüstüne çık", func() -> void: get_tree().quit()))
+	v.add_child(UiKit.label("hud.controls.touch" if Game.touch else "hud.controls", 14, "ui", Color(0.5, 0.5, 0.5)))
 	_settings = SettingsPanel.new()
 	_settings.hide()
 	_settings.closed.connect(func() -> void: v.show())
@@ -315,7 +320,7 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	# pencere odağı kaybolunca fare serbest kalır; tıklayınca tekrar yakala
-	if event is InputEventMouseButton and event.pressed and not _paused and not _end_layer.visible \
+	if not Game.touch and event is InputEventMouseButton and event.pressed and not _paused and not _end_layer.visible \
 			and Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		get_viewport().set_input_as_handled()
@@ -342,6 +347,11 @@ func _notification(what: int) -> void:
 		var p := Game.player as Player
 		if p and not p.dead:
 			set_paused(true)
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST and is_node_ready() and not _end_layer.visible:
+		var ev := InputEventAction.new()
+		ev.action = "pause"
+		ev.pressed = true
+		_unhandled_input(ev)
 
 
 func set_paused(on: bool) -> void:
@@ -352,7 +362,16 @@ func set_paused(on: bool) -> void:
 	if on:
 		_pause_menu.show()
 		_pause_notes.text = tr("Okunan notlar: %d/%d    ·    Süre: %s") % [Game.notes_read.size(), Game.NOTES_TOTAL, Game.elapsed_text()]
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if on else Input.MOUSE_MODE_CAPTURED
+	if not Game.touch:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if on else Input.MOUSE_MODE_CAPTURED
+
+
+func is_overlay_open() -> bool:
+	return _note_layer.visible or _pause_layer.visible or _end_layer.visible
+
+
+func has_prompt() -> bool:
+	return _prompt.text != ""
 
 
 func set_prompt(text: String) -> void:
@@ -362,7 +381,7 @@ func set_prompt(text: String) -> void:
 		_cross.size = Vector2(4, 4)
 		_cross.position = Vector2(-2, -2)
 	else:
-		_prompt.text = "[E]  " + text
+		_prompt.text = text if Game.touch else "[E]  " + text
 		_cross.color.a = 0.9
 		_cross.size = Vector2(6, 6)
 		_cross.position = Vector2(-3, -3)
@@ -408,11 +427,11 @@ func set_breath(value: float, holding: bool, enemy_near: bool) -> void:
 	if holding:
 		_breath_hint.text = tr("Nefesini tutuyorsun...")
 	elif enemy_near:
-		_breath_hint.text = tr("Yakında! NEFESİNİ TUT  [Sağ Tık / Boşluk]")
+		_breath_hint.text = tr("Yakında! NEFESİNİ TUT  [NEFES]" if Game.touch else "Yakında! NEFESİNİ TUT  [Sağ Tık / Boşluk]")
 		_breath_hint.add_theme_color_override("font_color", Color(0.95, 0.3, 0.25))
 		return
 	else:
-		_breath_hint.text = tr("Saklanıyorsun   [E] Çık   [Sağ Tık] Nefesini tut")
+		_breath_hint.text = tr("Saklanıyorsun   [ETKİLEŞ] Çık   [NEFES] Nefesini tut" if Game.touch else "Saklanıyorsun   [E] Çık   [Sağ Tık] Nefesini tut")
 	_breath_hint.add_theme_color_override("font_color", Color(0.82, 0.8, 0.76))
 
 
@@ -493,7 +512,8 @@ func show_end(win: bool) -> void:
 	v.add_child(bc)
 	buttons.add_child(UiKit.button("Tekrar oyna" if win else "Tekrar dene", func() -> void: Game.start_game()))
 	buttons.add_child(UiKit.button("Ana menü", func() -> void: Game.go_menu()))
-	buttons.add_child(UiKit.button("Masaüstüne çık", func() -> void: get_tree().quit()))
+	if not Game.mobile:
+		buttons.add_child(UiKit.button("Masaüstüne çık", func() -> void: get_tree().quit()))
 	_end_layer.modulate.a = 0.0
 	var tw := create_tween()
 	tw.tween_property(_end_layer, "modulate:a", 1.0, 1.5)

@@ -27,7 +27,12 @@ var width := 0
 var depth := 0
 var doors: Array[Dictionary] = []
 
-var _tools: Dictionary = {}
+## Geometri CHUNK x CHUNK hücrelik parçalara bölünür: Mobile renderer bir mesh'i en fazla
+## 8 omni + 8 spot ışıkla aydınlatır, tek parça seviyede ışıkların çoğu kaybolurdu.
+const CHUNK := 4
+
+var _tools: Dictionary = {}  # Vector2i chunk -> { malzeme id -> SurfaceTool }
+var _chunk := Vector2i.ZERO
 var _body: StaticBody3D
 
 
@@ -100,6 +105,7 @@ func build(parent: Node3D) -> void:
 		for x in width:
 			if not is_walk(x, z):
 				continue
+			_chunk = Vector2i(x / CHUNK, z / CHUNK)
 			if is_door(x, z):
 				_door_cell(x, z)
 				continue
@@ -127,17 +133,18 @@ func build(parent: Node3D) -> void:
 	_box(Vector3(width * CELL * 0.5, -0.5, depth * CELL * 0.5), span)
 	_box(Vector3(width * CELL * 0.5, HEIGHT + 0.5, depth * CELL * 0.5), span)
 
-	var mesh := ArrayMesh.new()
-	for id in _tools:
-		var st: SurfaceTool = _tools[id]
-		st.generate_tangents()
-		st.commit(mesh)
-		mesh.surface_set_material(mesh.get_surface_count() - 1, Mats.pbr(id))
-	var mi := MeshInstance3D.new()
-	mi.name = "LevelMesh"
-	mi.mesh = mesh
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
-	parent.add_child(mi)
+	for ch: Vector2i in _tools:
+		var mesh := ArrayMesh.new()
+		for id in _tools[ch]:
+			var st: SurfaceTool = _tools[ch][id]
+			st.generate_tangents()
+			st.commit(mesh)
+			mesh.surface_set_material(mesh.get_surface_count() - 1, Mats.pbr(id))
+		var mi := MeshInstance3D.new()
+		mi.name = "LevelMesh_%d_%d" % [ch.x, ch.y]
+		mi.mesh = mesh
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+		parent.add_child(mi)
 
 
 func make_astar() -> AStarGrid2D:
@@ -196,11 +203,14 @@ func _door_cell(x: int, z: int) -> void:
 
 
 func _st(id: String) -> SurfaceTool:
-	if not _tools.has(id):
+	if not _tools.has(_chunk):
+		_tools[_chunk] = {}
+	var tools: Dictionary = _tools[_chunk]
+	if not tools.has(id):
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		_tools[id] = st
-	return _tools[id]
+		tools[id] = st
+	return tools[id]
 
 
 ## pts: dört köşe. wall_uv=false ise UV = (x, z), aksi halde (yatay, yükseklik).

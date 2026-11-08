@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cpnor20quybh1"
 path.s3tc="res://.godot/imported/floor_base_arm.jpg-8ba0b699d25708fba4655e6fbe6c80cc.s3tc.ctex"
+path.etc2="res://.godot/imported/floor_base_arm.jpg-8ba0b699d25708fba4655e6fbe6c80cc.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/floor_base_arm.jpg"
-dest_files=["res://.godot/imported/floor_base_arm.jpg-8ba0b699d25708fba4655e6fbe6c80cc.s3tc.ctex"]
+dest_files=["res://.godot/imported/floor_base_arm.jpg-8ba0b699d25708fba4655e6fbe6c80cc.s3tc.ctex", "res://.godot/imported/floor_base_arm.jpg-8ba0b699d25708fba4655e6fbe6c80cc.etc2.ctex"]
 
 [params]
 

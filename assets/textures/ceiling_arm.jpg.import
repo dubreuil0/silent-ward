@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://d1q62d5x5dv8j"
 path.s3tc="res://.godot/imported/ceiling_arm.jpg-f842f966c118f4ce71a1d82291d997f4.s3tc.ctex"
+path.etc2="res://.godot/imported/ceiling_arm.jpg-f842f966c118f4ce71a1d82291d997f4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/ceiling_arm.jpg"
-dest_files=["res://.godot/imported/ceiling_arm.jpg-f842f966c118f4ce71a1d82291d997f4.s3tc.ctex"]
+dest_files=["res://.godot/imported/ceiling_arm.jpg-f842f966c118f4ce71a1d82291d997f4.s3tc.ctex", "res://.godot/imported/ceiling_arm.jpg-f842f966c118f4ce71a1d82291d997f4.etc2.ctex"]
 
 [params]
 

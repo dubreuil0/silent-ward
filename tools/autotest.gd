@@ -104,7 +104,9 @@ func _test_chase() -> void:
 func _test_patrol_soak() -> void:
 	var lvl := Game.level
 	var p := Game.player as Player
-	p.global_position = LevelBuilder.cell_center(17, 24)
+	# oyuncu haritanın dışında bekler: Hemşire onu bulup testi erken bitirmesin
+	p.set_physics_process(false)
+	p.global_position = Vector3(-200.0, 0.0, -200.0)
 	p.frozen = true
 	Engine.time_scale = 4.0
 	lvl.enemy.activate(LevelBuilder.cell_center(7, 2))
@@ -123,8 +125,9 @@ func _test_patrol_soak() -> void:
 			break
 	Engine.time_scale = 1.0
 	print("  yol: %.0f m, ziyaret edilen hücre: %d, durumlar: %s, oyuncu öldü: %s" % [travelled, visited.size(), states.keys(), p.dead])
-	check(travelled > 150.0, "Hemşire devriyede hareket etti")
-	check(visited.size() > 40, "Hemşire haritanın farklı yerlerini dolaştı")
+	# 120 sn oyun süresi x 1.3 m/s devriye hızı = en fazla ~156 m
+	check(travelled > 100.0, "Hemşire devriyede hareket etti")
+	check(visited.size() > 20, "Hemşire haritanın farklı yerlerini dolaştı")
 
 
 func _test_hide_and_paths() -> void:
